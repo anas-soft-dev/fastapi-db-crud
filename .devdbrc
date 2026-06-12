@@ -1,0 +1,6 @@
+[
+  {
+    "type": "sqlite",
+    "path": "d:\\FASTAPI\\database-system\\database_v1.db"
+  }
+]
