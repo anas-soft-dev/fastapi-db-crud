@@ -1,14 +1,39 @@
-from fastapi import APIRouter, Depends, HTTPException
-from app.schemas.user import UserSchema
+from fastapi import APIRouter, Depends, HTTPException, Request
+from app.schemas.user import UserSchema, LoginSchema
 from app.models.user import User
 from app.models.post import Post
 from app.database import SessionLocal
 from app.dependencies import get_db
 from sqlalchemy import or_, and_
 from sqlalchemy.orm import selectinload
+from app.auth import create_access_token, check_access_token
 
 
 router = APIRouter(prefix="/user")
+
+@router.get("/profile")
+def profile(request: Request, data = Depends(check_access_token)):
+    return data
+
+@router.post("/login")
+def login(data: LoginSchema, db = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid Email"
+        )
+    
+    if user.password != data.password:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid Password"
+        )
+    
+    token =  create_access_token({"sub":str(user.id),"email":user.email})
+
+    return {"access_token":token, "token_type":"Bearer"}
 
 
 
@@ -17,6 +42,7 @@ def all_user_post(db = Depends(get_db)):
     users = db.query(User).options(selectinload(User.posts)).first()
 
     return users
+
 @router.get("/post/{user_id}")
 def view_user_post(user_id: int, db = Depends(get_db)):
     user = db.get(User, user_id)
@@ -61,7 +87,8 @@ def store(request: UserSchema, db = Depends(get_db)):
 
     user = User(
        name = request.name,
-       email = request.email
+       email = request.email,
+       password = request.password
     )
     db.add(user)
     db.commit()

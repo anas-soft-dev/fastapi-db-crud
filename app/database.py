@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 engine = create_engine(
-    url="sqlite:///database_v1.db",
+    url="sqlite:///database_v2.db",
     connect_args={"check_same_thread":False}
 )
 

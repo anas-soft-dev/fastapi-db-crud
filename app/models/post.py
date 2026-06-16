@@ -11,15 +11,16 @@ class Post(Base):
 
     title: Mapped[str] = mapped_column(String(50))
 
+    description: Mapped[str]
+
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id")
     )
 
     category_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id")
+        ForeignKey("categories.id")
     )
 
-    description: Mapped[str]
 
     user: Mapped["User"] = relationship(
         back_populates="posts"

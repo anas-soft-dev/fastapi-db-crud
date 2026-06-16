@@ -2,5 +2,9 @@
   {
     "type": "sqlite",
     "path": "d:\\FASTAPI\\database-system\\database_v1.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "d:\\FASTAPI\\database-system\\database_v2.db"
   }
 ]

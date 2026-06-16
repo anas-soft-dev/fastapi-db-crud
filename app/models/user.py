@@ -15,6 +15,8 @@ class User(Base):
         unique=True
     )
 
+    password: Mapped[str]
+
     posts: Mapped[list["Post"]] = relationship(
         back_populates="user"
     )

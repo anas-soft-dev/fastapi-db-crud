@@ -6,13 +6,9 @@ from app.models.user import User
 class UserSchema(BaseModel):
     name:str = Field(min_length=3, max_length=50)
     email:EmailStr
-    # @field_validator("email")
-    # @classmethod
-    # def check_email(cls, value, db = Depends(get_db)):
-    #     user = db.query(User).filter(
-    #         User.email == value
-    #     ).first()
+    password: str = Field(min_length=8)
 
-    #     if user:
-    #         raise ValueError("Email already exists")
-    #     return value
+class LoginSchema(BaseModel):
+    email:EmailStr
+    password: str = Field(min_length=8)
+   
